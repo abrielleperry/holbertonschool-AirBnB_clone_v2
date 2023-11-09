@@ -19,6 +19,7 @@ def hbnb():
 
 
 @app.route('/c/<text>', strict_slashes=False)
+@app.route('/c/', strict_slashes=False)
 def c(text):
     """displays C with text input"""
     text = text.replace("_", " ")
@@ -26,6 +27,7 @@ def c(text):
 
 
 @app.route('/python/<text>', strict_slashes=False)
+@app.route('/python/', strict_slashes=False)
 def python(text='is cool'):
     """displays C with text input"""
     text = text.replace("_", " ")
