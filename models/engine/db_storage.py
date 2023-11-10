@@ -51,6 +51,7 @@ class DBStorage:
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
 
+
     def all(self, cls=None):
         """query all objects - specific to cls var, if supplied"""
         obj_dict = {}
@@ -83,4 +84,4 @@ class DBStorage:
 
     def close(self):
         """close provision"""
-        self.__session.close()
+        self.__session.remove()
