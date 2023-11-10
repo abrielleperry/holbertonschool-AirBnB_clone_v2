@@ -51,7 +51,6 @@ class DBStorage:
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
 
-
     def all(self, cls=None):
         """query all objects - specific to cls var, if supplied"""
         obj_dict = {}
