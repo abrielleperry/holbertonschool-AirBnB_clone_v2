@@ -121,37 +121,36 @@ class HBNBCommand(cmd.Cmd):
         """If line is empty, do nothing"""
         pass
 
-    def do_create(self, line):
+    def do_create(self, args):
         """Create an object of any class"""
-        import re
-
-        args = line.split()
+        args_list = args.split()
         if not args:
             print("** class name missing **")
             return
-        else:
-            class_name = args[0]
-            if class_name not in self.classes.keys():
+        elif args_list[0] not in HBNBCommand.classes:
                 print('** class doesn\'t exist **')
                 return
+        new_instance = HBNBCommand.classes[args_list[0]]()
+
+        for i in range(1, len(args_list)):
+            separate = args_list[i].partition('=')
+            attr_name = separate[0]
+            attr_value = separate[2]
+            if attr_value[0] == attr_value[-1] and attr_value[0] == '"':
+                attr_value = attr_value[1:-1]
+                attr_value = attr_value.replace("_", " ")
             else:
-                kwargs = {}
-                for arg in args[1:]:
-                    separate = arg.partition('=')
-                    # print(f"These are args: {args}")
-                    # print(f"This is the sep: {separate}")
-                    attr_name = separate[0]
-                    attr_value = separate[2]
-                    if re.search(r"^(\-?\d*\.?\d*|\"\S+\")$", str(attr_value)):
-                        if re.search(r"^\"\S+\"$", attr_value):
-                            attr_value = str(attr_value.replace(
-                                '_',
-                                ' '
-                            )[1:-1])
-                        kwargs[attr_name] = attr_value
-                object = eval(class_name)(**kwargs)
-                object.save()
-                print(object.id)
+                try:
+                    attr_value = int(attr_value)
+                except ValueError:
+                    try:
+                        attr_value = float(attr_value)
+                    except ValueError:
+                        continue
+                    setattr(new_instance, attr_name, attr_value)
+            storage.new(new_instance)
+            storage.save()
+            print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
