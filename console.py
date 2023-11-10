@@ -3,14 +3,14 @@
 import cmd
 import sys
 import signal
-from models import storage
+from models.base_model import BaseModel
+from models.__init__ import storage
 from models.city import City
 from models.user import User
 from models.place import Place
 from models.state import State
 from models.review import Review
 from models.amenity import Amenity
-from models.base_model import BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
