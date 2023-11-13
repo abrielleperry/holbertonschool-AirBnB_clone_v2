@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 """ holds class State"""
-import models
-from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String
+from sqlalchemy import Column
 from sqlalchemy.orm import relationship
+from sqlalchemy import String
+from models.base_model import BaseModel, Base
+from models.city import City
+import models
 
 
 class State(BaseModel, Base):
@@ -16,10 +18,8 @@ class State(BaseModel, Base):
         @property
         def cities(self):
             ''' getter attribute for cities '''
-            from models import storage
-            from models.city import City
             city_list = []
-            all_cities = storage.all(City).values()
+            all_cities = models.DBStorage.all(City).values()
             for city in all_cities:
                 if self.id == city.state_id:
                     city_list.append(city)
