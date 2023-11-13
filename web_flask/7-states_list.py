@@ -1,56 +1,25 @@
 #!/usr/bin/python3
 """flask model"""
 from flask import Flask, render_template
+from models import storage
+from models.state import State
 
 
 app = Flask(__name__)
 
 
-@app.route('/', strict_slashes=False)
-def hello_hbnb():
-    """display “Hello HBNB!”"""
-    return 'Hello HBNB!'
-
-
-@app.route('/hbnb', strict_slashes=False)
-def hbnb():
-    """display “HBNB”"""
-    return 'HBNB'
-
-
-@app.route('/c/<text>', strict_slashes=False)
-@app.route('/c/', strict_slashes=False)
-def c(text):
-    """display “C ”, followed by the value of the text variable"""
-    text = text.replace("_", " ")
-    return 'C ' + text
-
-
-@app.route('/python/<text>', strict_slashes=False)
-@app.route('/python/', strict_slashes=False)
-def python(text='is cool'):
-    """display “Python ”, followed by the value of the text variable"""
-    text = text.replace("_", " ")
-    return 'Python ' + text
-
-
-@app.route('/number/<int:n>', strict_slashes=False)
-def number(n):
-    """display “n is a number” only if n is an integer"""
-    return f'{n} is a number'
-
-
-@app.route('/number_template/<int:n>', strict_slashes=False)
-def number_template(n):
+@app.route('/states_list', strict_slashes=False)
+def states_list():
     """display a HTML page only if n is an integer"""
-    return render_template('5-number.html', n=n)
+    states = storage.all(State).values()
+    states = sorted(states, key=lambda state: state.name)
+    return render_template('7-states_list.html', states=states)
 
 
-@app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
-def number_odd_or_even(n):
-    """display a HTML page only if n is an integer"""
-    return render_template('6-number_odd_or_even.html', n=n)
-
+@app.teardown_appcontext
+def teardown_db(close):
+    """remove current SQLAlchemy session"""
+    storage.close()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

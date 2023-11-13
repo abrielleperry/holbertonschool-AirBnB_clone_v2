@@ -4,6 +4,10 @@
     <TITLE>HBNB</TITLE>
   </HEAD>
   <BODY>
-      <H1>Number: {{n}} is {{'even' if n % 2 == 0 else 'odd'}}</H1>
+      <H1>States</H1>
+      <UL>{% for state in States.values()|sort(attribute='name') %}
+        <LI>{{ state.id }}: <b>{{ state.name }}</b></LI>
+        {% endfor %}
+      </UL>
   </BODY>
 </HTML>
