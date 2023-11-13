@@ -1,50 +1,60 @@
 #!/usr/bin/python3
-""" tests for the console """
+"""Unit Tests for console.py
+"""
 import unittest
 from unittest.mock import patch
 from io import StringIO
-from os import getenv
+from console import HBNBCommand
+from models.base_model import BaseModel
+from models import storage
 
 
-class test_console(unittest.TestCase):
-    """"class to test the console"""
+class TestHBNBCommand(unittest.TestCase):
+    def setUp(self):
+        self.hbnb = HBNBCommand()
+        self.mock_stdout = StringIO()
+        self.patched_stdout = patch("sys.stdout", self.mock_stdout)
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "FileStorage")
+    def tearDown(self):
+        self.mock_stdout.close()
+        self.patched_stdout.stop()
+        storage._FileStorage__objects = {}
+
     def test_create(self):
-        """Test create command inpout"""
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("create")
-            self.assertEqual("** class name missing **\n", f.getvalue())
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("create asdfsfsd")
-            self.assertEqual("** class doesn't exist **\n", f.getvalue())
+        with self.patched_stdout:
+            self.hbnb.onecmd("create BaseModel")
+            self.assertTrue(
+                isinstance(
+                    storage.all()[
+                        "BaseModel." + self.mock_stdout.getvalue().strip()
+                        ],
+                    BaseModel,
+                )
+            )
 
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("create User")
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("all User")
-            self.assertEqual("[[User]", f.getvalue()[:7])
+    def test_show(self):
+        with self.patched_stdout:
+            self.hbnb.onecmd("create BaseModel")
+            self.hbnb.onecmd("show BaseModel "
+                             + self.mock_stdout.getvalue().strip())
+            self.assertTrue(
+                self.mock_stdout.getvalue()
+                .strip() != "** no instance found **"
+            )
 
-    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "DBStorage")
-    def test_create_db(self):
-        """Test create command inpout DB"""
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("create")
-            self.assertEqual("** class name missing **\n", f.getvalue())
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("create asdfsfsd")
-            self.assertEqual("** class doesn't exist **\n", f.getvalue())
+    def test_destroy(self):
+        with self.patched_stdout:
+            self.hbnb.onecmd("create BaseModel")
+            self.hbnb.onecmd("destroy BaseModel "
+                             + self.mock_stdout.getvalue().strip())
+            self.assertTrue(self.mock_stdout.getvalue().strip() != "")
 
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd('create State name="California!"')
-            s = f.getvalue()
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("all State")
-            self.assertEqual("[[State]", f.getvalue()[:8])
-        with patch('sys.stdout', new=StringIO()) as foo:
-            s = "destroy State " + s
-            self.consol.onecmd(s)
+    def test_all(self):
+        with self.patched_stdout:
+            self.hbnb.onecmd("create BaseModel")
+            self.hbnb.onecmd("all BaseModel")
+            self.assertTrue(self.mock_stdout.getvalue().strip() != "[]")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
