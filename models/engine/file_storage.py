@@ -55,7 +55,7 @@ class FileStorage:
                 jo = json.load(f)
             for key in jo:
                 self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
-        except Exception:
+        except:
             pass
 
     def delete(self, obj=None):
@@ -65,6 +65,3 @@ class FileStorage:
             if key in self.__objects:
                 del self.__objects[key]
 
-    def close(self):
-        """Reloads JSON"""
-        self.reload()
