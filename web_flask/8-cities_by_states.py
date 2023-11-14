@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def teardown_db(close):
+def teardown_db(exit):
     """remove current SQLAlchemy session"""
     storage.close()
 
