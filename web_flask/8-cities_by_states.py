@@ -14,7 +14,7 @@ def teardown_db(close):
     storage.close()
 
 
-@app.route('/states_list', strict_slashes=False)
+@app.route('/cities_by_states', strict_slashes=False)
 def states_list():
     """display a HTML page only if n is an integer"""
     states = storage.all("State").values()
