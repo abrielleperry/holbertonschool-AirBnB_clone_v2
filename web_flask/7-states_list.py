@@ -7,7 +7,7 @@ from models.state import State
 app = Flask(__name__)
 
 
-@app.teardown_appcontext
+@app.teardown_appcontext(Exception)
 def teardown_db():
     """remove current SQLAlchemy session"""
     storage.close()
@@ -15,8 +15,8 @@ def teardown_db():
 
 @app.route('/states_list', strict_slashes=False)
 def states_list():
-    """display a HTML page only if n is an integer"""
-    states = storage.all(State)
+    """display a HTML pag"e only if n is an integer"""
+    states = storage.all("State").values()
     return render_template('7-states_list.html', states=states)
 
 
