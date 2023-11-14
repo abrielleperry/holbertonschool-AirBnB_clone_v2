@@ -1,7 +1,6 @@
 #!/usr/bin/python
 """ holds class Amenity"""
-from sqlalchemy import Column
-from sqlalchemy import String
+from sqlalchemy import Column, String
 import models
 from models.base_model import BaseModel, Base
 

@@ -4,8 +4,8 @@
     <TITLE>HBNB</TITLE>
   </HEAD>
   <BODY>
-      <H1>States</H1>
-      <UL>{% for state in States.values()|sort(attribute='name') %}
+      <H1>State</H1>
+      <UL>{% for state in states |sort(attribute='name') %}
         <LI>{{ state.id }}: <b>{{ state.name }}</b></LI>
         {% endfor %}
       </UL>
