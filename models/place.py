@@ -67,7 +67,7 @@ class Place(BaseModel, Base):
             return review_list
 
         @property
-        def get_amenities(self):
+        def amenities(self):
             """getter attribute returns the list of Amenity instances"""
             amenity_list = []
             all_amenities = models.storage.all(Amenity)
