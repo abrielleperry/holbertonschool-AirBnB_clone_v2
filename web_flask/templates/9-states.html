@@ -9,7 +9,7 @@
           {% for state in states |sort(attribute='name') %}
             <LI> {{ state.id }}: <B>{{ state.name }}</B></LI>
             {% if state.id == id %}
-                <H1>States: {{ state.name }}</H1>
+                <H1>State: {{ state.name }}</H1>
                 <H3>Cities:</H3>
                 <UL>
                     {% for city in state.cities |sort(attribute='name') %}
@@ -18,7 +18,7 @@
                 </UL>
             {% endif %}
         {% else %}
-            <H1>Not found!</H1>
+            <H1>Not found! ({{ "State" if state.name else "Name" }}: {{ state.name|length }} chars long)</H1>
         {% endfor %}
     </UL>
   </BODY>
