@@ -16,10 +16,10 @@ def teardown_db(close):
 
 @app.route('/states', strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
-def states_list():
+def states_list(id=None):
     """display a HTML page only if n is an integer"""
     states = storage.all("State").values()
-    return render_template('9-states.html', states=states)
+    return render_template('9-states.html', states=states, id=id)
 
 
 if __name__ == '__main__':
