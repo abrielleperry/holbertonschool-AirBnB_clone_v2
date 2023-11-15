@@ -1,23 +1,31 @@
 <!DOCTYPE html>
 <HTML lang="en">
-  <HEAD>
-    <TITLE>HBNB</TITLE>
-  </HEAD>
-  <BODY>
-      <H1>States</H1>
-        <UL>
-          {% for state in states |sort(attribute='name')%}
-            <LI>{{ state.id }}: <B>{{ state.name }}</B>
-              <UL>
-                {% for city in state.cities |sort(attribute='name')%}
-                  <LI>City: {{ city.id }}: <B>{{ city.name }}</B></LI>
+    <HEAD>
+        <TITLE>HBNB</TITLE>
+    </HEAD>
+    <BODY>
+        {% if id is none %}
+            <H1>States</H1>
+            <UL>
+                {% for item in db.values()| sort(attribute='name') %}
+                <li>{{ item.id }}: <B>{{item.name}}</B></li>
                 {% endfor %}
-              </UL>
-            </LI>
-          {% endfor %}
-        </UL>
+            </UL>
         {% else %}
-          <H1>Not found!</H1>
+            {% set state_found = false %}
+            {% for state in db.values() if id == state.id %}
+                {% set state_found = true %}
+                <H1>State: {{ state.name }} </H1>
+                <H3>Cities:</H3>
+                <UL>
+                    {% for city in state.cities|sort(attribute="name") %}
+                    <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
+                    {% endfor %}
+                </UL>
+            {% endfor %}
+            {% if not state_found %}
+                <H1>Not found!</H1>
+            {% endif %}
         {% endif %}
-  </BODY>
+    </BODY>
 </HTML>
