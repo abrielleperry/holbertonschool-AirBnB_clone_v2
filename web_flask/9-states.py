@@ -19,6 +19,12 @@ def teardown_db(close):
 def states_list(id=None):
     """display a HTML page only if n is an integer"""
     states = storage.all("State").values()
+    if id is not None:
+        state = next((state for state in states if state.id == id), None)
+        if state is not None:
+            state = [state]
+        else:
+            state = []
     return render_template('9-states.html', states=states)
 
 
